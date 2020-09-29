@@ -1,7 +1,7 @@
 const fs = require('fs')
 const YAML = require('yaml')
 
-const ledDudes = require('./ledDudes')
+const ledDudes = require('./led-dudes')
 
 const configPath = process.argv[2]
 if (!configPath || !fs.existsSync(configPath))
