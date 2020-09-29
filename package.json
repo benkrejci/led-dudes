@@ -1,0 +1,14 @@
+{
+  "name": "led-dudes",
+  "version": "1.0.0",
+  "description": "Control RGB LED strips",
+  "main": "index.js",
+  "repository": "https://github.com/benkrejci/led-dudes",
+  "author": "benkrejci",
+  "license": "MIT",
+  "dependencies": {
+    "dotstar": "^1.0.0",
+    "pi-spi": "^1.2.1",
+    "yaml": "^1.10.0"
+  }
+}
