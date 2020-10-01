@@ -80,7 +80,8 @@ class Ws281xController extends AbstractLedController {
     setPixel(index, red, green, blue) {
         if (index < 0 || index > this.config.stripLength) throw new Error(`setPixel index ouside of range 0 - ${this.config.stripLength}`)
 
-        this.pixelData[index] = this.rgbToInt(normalize(red), normalize(green), normalize(blue))
+	const gamma = this.config.gamma
+        this.pixelData[index] = this.rgbToInt(normalize(red, gamma), normalize(green, gamma), normalize(blue, gamma))
     }
 
     update() {
