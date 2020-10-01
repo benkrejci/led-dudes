@@ -1,6 +1,5 @@
 const { getLedController } = require('./led-controller')
 
-const GAMMA_DEFAULT = 2.2
 const POWER_DEFAULT = 2
 const SPEED_DEFAULT = 1
 const MORPH_RATE_DEFAULT = 5
@@ -14,9 +13,6 @@ const SCHEDULE_INTERVAL_DELAY = 10 * 1000
 const TIME_SCALE = 1 / 7000
 const POSITION_SCALE = 1
 const SEED_SCALE = 1000
-
-// This function improves the color accuracy somewhat by doing gamma correction
-const normalize = (value, gamma) => Math.pow(value / 255, 1 / gamma) * 255
 
 const oneSine = x => Math.max(0, Math.min(1, Math.sin(x) * 0.5 + 0.5))
 
@@ -40,8 +36,6 @@ const blendColors = (blendMode, base, blend) => {
 
 exports.start = (config) => {
     const controller = getLedController(config)
-
-    if (config.gamma === undefined) config.gamma = GAMMA_DEFAULT
 
     if (!config.dudes || !config.dudes.length) throw new TypeError('Missing or invalid dudes array')
     config.dudes.forEach(dude => {
@@ -147,7 +141,7 @@ function startDudes(config, controller) {
                     return [dude, dude.rgb.map(value => value * level)]
                 })
                 .reduce((rgbSum, [dude, rgb]) => blendColors(dude.blendMode, rgbSum, rgb), [0,0,0])
-                .map(value => normalize(Math.max(0, Math.min(255, value)), config.gamma))
+                .map(value => Math.max(0, Math.min(255, value)))
             controller.setPixel(position, ...color)
         }
         frames++

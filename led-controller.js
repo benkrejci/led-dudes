@@ -59,12 +59,17 @@ class DotstarController extends AbstractLedController {
 const ws281x = require('rpi-ws281x-native')
 
 const rgbToInt = (r, g, b) => ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff)
+const GAMMA_DEFAULT = 2.2
+// This function improves the color accuracy somewhat by doing gamma correction
+// In my experience, dotstars do not need this--maybe they have gamma correction built in?
+const normalize = (value, gamma) => Math.pow(value / 255, 1 / gamma) * 255
 
 class Ws281xController extends AbstractLedController {
     constructor(config) {
         super(config)
 
         if (isNaN(config.stripLength)) throw new TypeError('stripLength is required')
+        if (config.gamma === undefined) config.gamma = GAMMA_DEFAULT
         this.rgbToInt = this.config.colorOrder === 'grb' ? (r, g, b) => rgbToInt(g, r, b) : rgbToInt
 
         this.pixelData = new Uint32Array(config.stripLength)
@@ -75,7 +80,7 @@ class Ws281xController extends AbstractLedController {
     setPixel(index, red, green, blue) {
         if (index < 0 || index > this.config.stripLength) throw new Error(`setPixel index ouside of range 0 - ${this.config.stripLength}`)
 
-        this.pixelData[index] = this.rgbToInt(red, green, blue)
+        this.pixelData[index] = this.rgbToInt(normalize(red), normalize(green), normalize(blue))
     }
 
     update() {
