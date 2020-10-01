@@ -1,4 +1,5 @@
 ---
+ledType: dotstar
 stripLength: 60
 
 schedule:
@@ -19,4 +20,4 @@ dudes:
   #  rgb: [30, 120, 255]
   - constant: true
     blendMode: DEFAULT
-    rgb: [12, 0, 16]
+    rgb: [40, 0, 60]

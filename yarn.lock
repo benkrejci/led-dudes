@@ -12,12 +12,24 @@ nan@^2.14.0:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.1.tgz#d7be34dfa3105b91494c3147089315eff8874b01"
   integrity sha512-isWHgVjnFjh2x2yuJ/tj3JbwoHu3UC2dX5G/88Cm24yB6YopVgxvBObDY7n5xW6ExmFhJpSEQqFPvq9zaXc8Jw==
 
+node-addon-api@^3.0.0:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-3.0.2.tgz#04bc7b83fd845ba785bb6eae25bc857e1ef75681"
+  integrity sha512-+D4s2HCnxPd5PjjI0STKwncjXTUKKqm74MDMz9OPXavjsGmjkvwgLtA5yoxJUdmpj52+2u+RrXgPipahKczMKg==
+
 pi-spi@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/pi-spi/-/pi-spi-1.2.1.tgz#14275e906adb0e5117f00ac3c2d4a2e5e3168040"
   integrity sha512-cPquRYzFZJzPwFpFpLOY13bg+jYzufo0hhYi+IsMlcSSdmzHqHLvghUz4vZWcjm6tqiEwNoMP8MQR1wuyLpnnw==
   dependencies:
     nan "^2.14.0"
+
+rpi-ws281x-native@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/rpi-ws281x-native/-/rpi-ws281x-native-0.10.0.tgz#35e69f9a5a2152ac361653dee0095fcae4d40775"
+  integrity sha512-10feoH/unpKW8OnmRk79/ExcXViuUDs9leiO1shkwstSFUITC0uBmjzjxN4zo2kfNZwvUpgpeeH+Q6GAJ0J71Q==
+  dependencies:
+    node-addon-api "^3.0.0"
 
 yaml@^1.10.0:
   version "1.10.0"

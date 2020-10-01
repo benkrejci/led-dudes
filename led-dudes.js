@@ -1,7 +1,6 @@
-const dotstar = require('dotstar')
-const SPI = require('pi-spi')
+const { getLedController } = require('./led-controller')
 
-const SPI_DEVICE_DEFAULT = '/dev/spidev0.0'
+const GAMMA_DEFAULT = 2.2
 const POWER_DEFAULT = 2
 const SPEED_DEFAULT = 1
 const MORPH_RATE_DEFAULT = 5
@@ -15,6 +14,9 @@ const SCHEDULE_INTERVAL_DELAY = 10 * 1000
 const TIME_SCALE = 1 / 7000
 const POSITION_SCALE = 1
 const SEED_SCALE = 1000
+
+// This function improves the color accuracy somewhat by doing gamma correction
+const normalize = (value, gamma) => Math.pow(value / 255, 1 / gamma) * 255
 
 const oneSine = x => Math.max(0, Math.min(1, Math.sin(x) * 0.5 + 0.5))
 
@@ -37,10 +39,9 @@ const blendColors = (blendMode, base, blend) => {
 }
 
 exports.start = (config) => {
-    spi = SPI.initialize(config.spiDevice || SPI_DEVICE_DEFAULT)
+    const controller = getLedController(config)
 
-    if (isNaN(config.stripLength)) throw new TypeError('stripLength is required')
-    const strip = new dotstar.Dotstar(spi, { length: config.stripLength })
+    if (config.gamma === undefined) config.gamma = GAMMA_DEFAULT
 
     if (!config.dudes || !config.dudes.length) throw new TypeError('Missing or invalid dudes array')
     config.dudes.forEach(dude => {
@@ -64,7 +65,7 @@ exports.start = (config) => {
     let dudesInterval = null
     let scheduleInterval = null
     if (!config.schedule) {
-	dudesInterval = startDudes(config, strip)
+        dudesInterval = startDudes(config, controller)
     } else {
         let currentScheduleRule = null
         scheduleInterval = setInterval(() => {
@@ -72,7 +73,7 @@ exports.start = (config) => {
             if (currentScheduleRule === null) {
                 config.schedule.every(rule => {
                     if (isAfter(now, rule.start) && !isAfter(now, rule.end)) {
-                        dudesInterval = startDudes(config, strip)
+                        dudesInterval = startDudes(config, controller)
                         currentScheduleRule = rule
                     } else {
                         return true
@@ -80,7 +81,7 @@ exports.start = (config) => {
                 })
             } else if (dudesInterval !== null && isAfter(now, currentScheduleRule.end)) {
                 clearInterval(dudesInterval)
-		strip.off()
+                controller.off()
                 dudesInterval = null
             }
         }, SCHEDULE_INTERVAL_DELAY)
@@ -90,7 +91,7 @@ exports.start = (config) => {
         console.log(`Caught ${event}, exiting`)
         if (dudesInterval !== null) clearInterval(dudesInterval)
         if (scheduleInterval !== null) clearInterval(scheduleInterval)
-        strip.off()
+        controller.off()
         process.exit(1)
     }))
 }
@@ -101,7 +102,7 @@ function isAfter(date, ruleTime) {
            : date.getHours() > ruleTime[0]
 }
 
-function startDudes(config, strip) {
+function startDudes(config, controller) {
     let frames = 0
     let sinceFpsPrint = 0
     let tLast = +new Date() * TIME_SCALE
@@ -112,6 +113,7 @@ function startDudes(config, strip) {
         tLast = t
         config.dudes.forEach(dude => {
             if (dude.constant) return
+            if (dude.test) return
             const speed = Math.sin(dude.acceleration * TIME_SCALE * t + dude.seed)
             dude.timeParam += dude.morphRate * speed * TIME_SCALE * dt
             dude.positionParam = TIME_SCALE * t * dude.speed + 2 * dude.seed
@@ -128,6 +130,10 @@ function startDudes(config, strip) {
         for (let position = 0; position < config.stripLength; position++) {
             const color = config.dudes
                 .map(dude => {
+                    if (dude.test) {
+                        const mod = position % 2
+                        return [dude, mod ? dude.rgb : dude.rgb2]
+                    }
                     if (dude.strobe && !dude.on) return [dude, [0,0,0]]
                     if (dude.constant) return [dude, dude.rgb]
                     dude.positionParam += dude.positionDelta
@@ -141,8 +147,8 @@ function startDudes(config, strip) {
                     return [dude, dude.rgb.map(value => value * level)]
                 })
                 .reduce((rgbSum, [dude, rgb]) => blendColors(dude.blendMode, rgbSum, rgb), [0,0,0])
-                .map(value => Math.max(0, Math.min(255, value)))
-            strip.set(position, ...color)
+                .map(value => normalize(Math.max(0, Math.min(255, value)), config.gamma))
+            controller.setPixel(position, ...color)
         }
         frames++
         sinceFpsPrint += dt
@@ -151,6 +157,7 @@ function startDudes(config, strip) {
             frames = 0
             sinceFpsPrint = 0
         }
-        strip.sync()
+        controller.update()
     }, config.intervalDelay || DUDES_INTERVAL_DELAY)
 }
+

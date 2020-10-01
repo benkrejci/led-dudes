@@ -9,6 +9,7 @@
   "dependencies": {
     "dotstar": "^1.0.0",
     "pi-spi": "^1.2.1",
+    "rpi-ws281x-native": "^0.10.0",
     "yaml": "^1.10.0"
   }
 }
