@@ -6,8 +6,16 @@ Control RGB led strips with traveling and morphing "dudes" (fm sine waves). Supp
 | --- | --- | --- |
 | ledType | yes | dotstar or SK9822, neopixel or ws281x |
 | stripLength | yes | int total number of LEDs |
-| schedule |  | list of times to be "on" in form: `state: ON<br>start: [h, m]<br>end: [h, m]` where h is int hours and m is int minutes |
+| schedule |  | list of times to be "on", see below for format |
 | dudes |  | list of "dudes"; see [implementation](./led-dudes.js) and [examples](./config/) for details |
+
+**Schedule item should be in form:**
+```yml
+state: ON
+start: [h, m]
+end: [h, m]
+```
+Where h is int hours (0 - 23) and m is int minutes (0 - 59)
 
 ## Usage
 Only argument is config file
