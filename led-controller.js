@@ -1,7 +1,8 @@
 exports.getLedController = (config) => {
-    if (config.ledType === 'dotstar') return new DotstarController(config)
-    if (config.ledType === 'ws281x')  return new Ws281xController(config)
-    throw new Error(`No implementation for ledType ${config.ledType}`)
+    const ledType = String(config.ledType).toLowerCase()
+    if (['dotstar', 'sk9822'].includes(ledType)) return new DotstarController(config)
+    if (['neopixel', 'ws281x'].includes(ledType))  return new Ws281xController(config)
+    throw new Error(`Invalid or unsupported ledType: ${config.ledType}`)
 }
 
 class AbstractLedController {
@@ -61,8 +62,14 @@ const ws281x = require('rpi-ws281x-native')
 const rgbToInt = (r, g, b) => ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff)
 const GAMMA_DEFAULT = 2.2
 // This function improves the color accuracy somewhat by doing gamma correction
+// I also boost the output by 16 because my NeoPixels don't turn on from 0 - 15
 // In my experience, dotstars do not need this--maybe they have gamma correction built in?
-const normalize = (value, gamma) => Math.pow(value / 255, 1 / gamma) * 255
+//const normalize = (value, gamma) => Math.pow(value / 255, 1 / gamma) * 200
+//const normalize = (value, gamma) => Math.pow(value / 255, gamma) * 239 + 16
+const normalize = (value) => ( Math.asin(value / 127.5 - 1) / Math.PI + 0.5 ) * 239 + 16
+//for (let x = 0; x <= 255; x++) {
+//    console.log(x, normalize(x, GAMMA_DEFAULT))
+//}
 
 class Ws281xController extends AbstractLedController {
     constructor(config) {
@@ -80,7 +87,7 @@ class Ws281xController extends AbstractLedController {
     setPixel(index, red, green, blue) {
         if (index < 0 || index > this.config.stripLength) throw new Error(`setPixel index ouside of range 0 - ${this.config.stripLength}`)
 
-	const gamma = this.config.gamma
+        const gamma = this.config.gamma
         this.pixelData[index] = this.rgbToInt(normalize(red, gamma), normalize(green, gamma), normalize(blue, gamma))
     }
 

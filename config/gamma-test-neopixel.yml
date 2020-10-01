@@ -1,0 +1,7 @@
+---
+ledType: ws281x
+colorOrder: grb
+stripLength: 120
+
+dudes:
+  - test: true

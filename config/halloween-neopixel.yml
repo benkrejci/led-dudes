@@ -3,10 +3,10 @@ ledType: ws281x
 colorOrder: grb
 stripLength: 120
 
-schedule:
-  - state: ON
-    start: [17, 0]
-    end: [23, 0]
+#schedule:
+#  - state: ON
+#    start: [17, 0]
+#    end: [23, 0]
 
 dudes:
   - rgb: [255, 25, 0]
