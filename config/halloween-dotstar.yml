@@ -1,6 +1,6 @@
 ---
 ledType: dotstar
-stripLength: 60
+stripLength: 120
 
 schedule:
   - state: ON

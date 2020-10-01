@@ -107,7 +107,15 @@ function startDudes(config, controller) {
         tLast = t
         config.dudes.forEach(dude => {
             if (dude.constant) return
-            if (dude.test) return
+            if (dude.test) {
+                dude.testColors = []
+                for (let i = 0; i < config.stripLength; i++) {
+                    let color = (i + 1) / config.stripLength
+                    color = i % 2 ? 1 - color : color
+                    color *= 255
+                    dude.testColors[i] = [color, color, color]
+                }
+            }
             const speed = Math.sin(dude.acceleration * TIME_SCALE * t + dude.seed)
             dude.timeParam += dude.morphRate * speed * TIME_SCALE * dt
             dude.positionParam = TIME_SCALE * t * dude.speed + 2 * dude.seed
@@ -124,10 +132,7 @@ function startDudes(config, controller) {
         for (let position = 0; position < config.stripLength; position++) {
             const color = config.dudes
                 .map(dude => {
-                    if (dude.test) {
-                        const mod = position % 2
-                        return [dude, mod ? dude.rgb : dude.rgb2]
-                    }
+                    if (dude.test) return [dude, dude.testColors[position]]
                     if (dude.strobe && !dude.on) return [dude, [0,0,0]]
                     if (dude.constant) return [dude, dude.rgb]
                     dude.positionParam += dude.positionDelta

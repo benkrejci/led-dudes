@@ -1,0 +1,6 @@
+---
+ledType: dotstar
+stripLength: 120
+
+dudes:
+  - test: true

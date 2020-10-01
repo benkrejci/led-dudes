@@ -1,0 +1,10 @@
+---
+ledType: dotstar
+stripLength: 120
+
+dudes:
+  - rgb: [255, 0, 0]
+  - rgb: [0, 255, 0] 
+    blendMode: AVERAGE
+  - rgb: [0, 0, 255]
+    blendMode: AVERAGE

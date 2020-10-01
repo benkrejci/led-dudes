@@ -1,5 +1,6 @@
 ---
-stripLength: 60
+ledType: neopixel
+stripLength: 120
 
 dudes:
   - rgb: [255, 0, 0]
