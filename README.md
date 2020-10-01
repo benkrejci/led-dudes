@@ -3,7 +3,7 @@ Control RGB led strips with traveling and morphing "dudes" (fm sine waves). Supp
 
 ## Config options
 | Option | Required | Description |
-| --- | --- |
+| --- | --- | --- |
 | ledType | yes | dotstar or SK9822, neopixel or ws281x |
 | stripLength | yes | int total number of LEDs |
 | schedule |  | list of times to be "on" in form: `state: ON<br>start: [h, m]<br>end: [h, m]` where h is int hours and m is int minutes |
