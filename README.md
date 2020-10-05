@@ -26,8 +26,16 @@ Only argument is config file
 
 I use pm2 to start on boot:
 ```sh
-yarn global add pm2
+yarn global add pm2 # or npm install -g pm2
 pm2 startup # follow instructions
 pm2 start --name led-dudes index.js -- config/halloween-dotstar.yml
+pm2 save
+```
+
+Note that you will need to run as root if you use neopixel (WS281x) mode. For example:
+```sh
+sudo startup
+sudo pm2 start --name led-dudes index.js -- config/halloween-neopixel.yml
+sudo pm2 save
 ```
 
