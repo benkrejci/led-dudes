@@ -22,7 +22,7 @@ Only argument is config file
 `node index.js config/halloween-dotstar.yml`
 
 ## Install
-`yarn install`
+`yarn install # or npm install`
 
 I use pm2 to start on boot:
 ```sh
