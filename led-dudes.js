@@ -77,6 +77,7 @@ exports.start = (config) => {
                 clearInterval(dudesInterval)
                 controller.off()
                 dudesInterval = null
+                currentScheduleRule = null
             }
         }, SCHEDULE_INTERVAL_DELAY)
     }
