@@ -10,14 +10,11 @@ schedule:
 dudes:
   - rgb: [255, 25, 0]
   - rgb: [180, 40, 0]
-  #- strobe: true
-  #  blendMode: REPLACE
-  #  power: 12
-  #  width: 10
-  #  speed: 20
-  #  scale: 5
-  #  offset: -4
-  #  rgb: [30, 120, 255]
-  - constant: true
+#  - strobe: true
+#    blendMode: REPLACE
+#    power: 2
+#    speed: 20
+#    rgb: [30, 120, 255]
+  - mode: constant
     blendMode: DEFAULT
     rgb: [40, 0, 60]

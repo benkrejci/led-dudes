@@ -26,13 +26,13 @@ class AbstractLedController {
 /**
  * AdaFruit Dotstar implementation
  */
-const dotstar = require('dotstar')
-const SPI = require('pi-spi')
-const SPI_DEVICE_DEFAULT = '/dev/spidev0.0'
-
 class DotstarController extends AbstractLedController {
     constructor(config) {
         super(config)
+
+        const dotstar = require('dotstar')
+        const SPI = require('pi-spi')
+        const SPI_DEVICE_DEFAULT = '/dev/spidev0.0'
 
         if (isNaN(config.stripLength)) throw new TypeError('stripLength is required')
 
@@ -57,8 +57,6 @@ class DotstarController extends AbstractLedController {
 /**
  * WS281x LED implementation (used in AdaFruit NeoPixels)
  */
-const ws281x = require('rpi-ws281x-native')
-
 const rgbToInt = (r, g, b) => ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff)
 // This function improves the color accuracy somewhat by doing gamma correction
 // I also boost the output by 16 because my NeoPixels don't turn on from 0 - 15
@@ -69,6 +67,8 @@ const normalize = (value) => ( Math.asin(value / 127.5 - 1) / Math.PI + 0.5 ) * 
 class Ws281xController extends AbstractLedController {
     constructor(config) {
         super(config)
+
+        this.ws281x = require('rpi-ws281x-native')
 
         if (isNaN(config.stripLength)) throw new TypeError('stripLength is required')
         this.rgbToInt = this.config.colorOrder === 'grb' ? (r, g, b) => rgbToInt(g, r, b) : rgbToInt
@@ -85,11 +85,11 @@ class Ws281xController extends AbstractLedController {
     }
 
     update() {
-        ws281x.render(this.pixelData)
+        this.ws281x.render(this.pixelData)
     }
 
     off() {
-        ws281x.reset()
+        this.ws281x.reset()
     }
 }
 
