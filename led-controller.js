@@ -1,5 +1,6 @@
-exports.getLedController = (config) => {
+exports.getLedController = (config, dummy = false) => {
     const ledType = String(config.ledType).toLowerCase()
+    if (dummy || 'dummy' === ledType) return new DummyController(config)
     if (['dotstar', 'sk9822'].includes(ledType)) return new DotstarController(config)
     if (['neopixel', 'ws281x'].includes(ledType))  return new Ws281xController(config)
     throw new Error(`Invalid or unsupported ledType: ${config.ledType}`)
@@ -20,6 +21,91 @@ class AbstractLedController {
 
     off() {
         throw new Error('Not implemented')
+    }
+
+    log(...args) {
+        console.log(...args)
+    }
+}
+
+/**
+ * Dummy controller; shows simulation of LEDs in terminal
+ */
+const PIXEL_CHAR = '●'
+
+class DummyController extends AbstractLedController {
+    constructor(config) {
+        super(config)
+
+        if (isNaN(config.stripLength)) throw new TypeError('stripLength is required')
+
+        this.term = require('terminal-kit').terminal
+        this.term.clear().hideCursor(true).saveCursor()
+
+        this.pixelData = new Array(config.stripLength)
+        this.logLine = ''
+    }
+
+    log(...args) {
+        this.logLine = args.join(', ')
+    }
+
+    setPixel(index, red, green, blue) {
+        if (index < 0 || index > this.config.stripLength) throw new Error(`setPixel index ouside of range 0 - ${this.config.stripLength}`)
+
+        this.pixelData[index] = [red, green, blue]
+    }
+
+    update() {
+        const width = this.term.width
+        const pixelStack = this.pixelData.reverse()
+        let x = 0, y = 0
+        let direction = 'right'
+        let lastHorizontalY = 0
+        let currentPixel
+        this.term.restoreCursor().move(0, 1)
+        while (currentPixel = pixelStack.pop()) {
+            this.term.colorRgb(...currentPixel, PIXEL_CHAR + ' ').move(-2, 0)
+            if (direction === 'right') {
+                if (x < width - 2) {
+                    this.term.move(2, 0)
+                    x += 2
+                } else {
+                    direction = 'down'
+                    lastHorizontalY = y
+                    this.term.move(0, 1).eraseLine()
+                    y++
+                }
+            } else if (direction === 'down') {
+                if (y - lastHorizontalY < 2) {
+                    this.term.move(0, 1).eraseLine()
+                    y++
+                } else if (x === 0) {
+                    direction = 'right'
+                    this.term.move(2, 0)
+                    x += 2
+                } else {
+                    direction = 'left'
+                    this.term.move(-2, 0)
+                    x -= 2
+                }
+            } else if (direction === 'left') {
+                if (x > 0) {
+                    this.term.move(-2, 0)
+                    x -= 2
+                } else {
+                    direction = 'down'
+                    lastHorizontalY = y
+                    this.term.move(0, 1).eraseLine()
+                    y++
+                }
+            }
+        }
+        this.term.nextLine(1, this.logLine).eraseLineAfter().eraseDisplayBelow()
+    }
+
+    off() {
+        this.term.clear().hideCursor(false)
     }
 }
 
@@ -74,8 +160,8 @@ class Ws281xController extends AbstractLedController {
         this.rgbToInt = this.config.colorOrder === 'grb' ? (r, g, b) => rgbToInt(g, r, b) : rgbToInt
 
         this.pixelData = new Uint32Array(config.stripLength)
-        ws281x.init(config.stripLength)
-        ws281x.setBrightness(255)
+        this.ws281x.init(config.stripLength)
+        this.ws281x.setBrightness(255)
     }
 
     setPixel(index, red, green, blue) {
