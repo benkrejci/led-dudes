@@ -1,5 +1,5 @@
 {
-  "name": "led-dudes",
+  "name": "@benkrejci/led-dudes",
   "version": "1.0.0",
   "description": "Control RGB LED strips",
   "main": "index.js",
