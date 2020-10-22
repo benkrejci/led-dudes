@@ -1,3 +1,15 @@
+/**
+ * @typedef {Object} Config
+ * @property {'dummy' | 'dotstar' | 'sk9822' | 'neopixel' | 'ws281x'} ledType
+ * @property {number} stripLength
+ * @property {string} [spiDevice]
+ */
+
+/**
+ * @param {Config} config
+ * @param {boolean} dummy
+ * @returns {AbstractLedController}
+ */
 exports.getLedController = (config, dummy = false) => {
     const ledType = String(config.ledType).toLowerCase()
     if (dummy || 'dummy' === ledType) return new DummyController(config)
@@ -7,10 +19,18 @@ exports.getLedController = (config, dummy = false) => {
 }
 
 class AbstractLedController {
+    /** @private */
     constructor(config) {
+        /** @private **/
         this.config = config
     }
 
+    /**
+     * @param {number} index
+     * @param {number} red
+     * @param {number} blue
+     * @param {number} green
+     */
     setPixel(index, red, blue, green) {
         throw new Error('Not implemented')
     }

@@ -1,0 +1,11 @@
+{
+  "include": ["**/*"],
+  "compilerOptions": {
+    "target": "ES2019",
+    "allowJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "types",
+    "typeRoots": ["types"]
+  }
+}
