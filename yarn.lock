@@ -14,6 +14,23 @@
     omggif "^1.0.10"
     pngjs "^5.0.0"
 
+"@types/nextgen-events@*":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@types/nextgen-events/-/nextgen-events-1.1.0.tgz#134730c1997af5fb9d4469a05e4b6a89df74e9b0"
+  integrity sha512-vRh1NWJKNuhdeo0x85veoA7gZTC9IIC9LSmFUHT5Vk50rH/SDvXy4gKarcT4rLfBWxOIfyozpX/IHAAnz4oWTg==
+
+"@types/node@^14.14.2":
+  version "14.14.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.2.tgz#d25295f9e4ca5989a2c610754dc02a9721235eeb"
+  integrity sha512-jeYJU2kl7hL9U5xuI/BhKPZ4vqGM/OmK6whiFAXVhlstzZhVamWhDSmHyGLIp+RVyuF9/d0dqr2P85aFj4BvJg==
+
+"@types/terminal-kit@^1.28.2":
+  version "1.28.2"
+  resolved "https://registry.yarnpkg.com/@types/terminal-kit/-/terminal-kit-1.28.2.tgz#74005c1c4674cd719f3faa4d521ecb7014fc6592"
+  integrity sha512-OZeTE0lE5N1MZJZfiHU2RgcH4zGpKF8K2vkKq1KsjsLqkrrLLmHrUjWzyJ3R+c4xNwNff4nID1vQn1CejVnFsw==
+  dependencies:
+    "@types/nextgen-events" "*"
+
 ansi-regex@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-5.0.0.tgz#388539f55179bf39339c81af30a654d69f87cb75"
