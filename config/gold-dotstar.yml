@@ -1,0 +1,15 @@
+---
+ledType: dotstar
+stripLength: 120
+
+schedule:
+  - state: ON
+    start: [17, 0]
+    end: [23, 0]
+
+dudes:
+  - rgb: [255, 28, 0]
+  - rgb: [220, 60, 0]
+  - mode: constant
+    blendMode: DEFAULT
+    rgb: [56, 10, 0]

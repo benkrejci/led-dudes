@@ -149,7 +149,7 @@ class DotstarController extends AbstractLedController {
         const SPI_DEVICE_DEFAULT = '/dev/spidev0.0'
 
         const spi = SPI.initialize(this.config.spiDevice || SPI_DEVICE_DEFAULT)
-        this.strip = new dotstar.Dotstar(spi, { length: this.config.stripLength })
+        this.strip = new dotstar.Dotstar(spi, { length: this.config.stripLength + 1 })
     }
 
     setPixel(...args: [number, number, number, number]) {
