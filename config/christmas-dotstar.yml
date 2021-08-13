@@ -1,0 +1,17 @@
+---
+ledType: dotstar
+stripLength: 120
+
+schedule:
+  - state: ON
+    start: [17, 0]
+    end: [23, 0]
+
+dudes:
+  - rgb: [255, 0, 0]
+    width: 50
+    mode: stripes
+  - rgb: [10, 200, 0]
+    width: 50
+    offset: 50
+    mode: stripes
