@@ -1,6 +1,6 @@
 {
   "name": "@benkrejci/led-dudes",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Control RGB LED strips",
   "main": "dist/index.ts",
   "types": "dist/index.d.ts",
