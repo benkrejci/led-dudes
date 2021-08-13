@@ -1,0 +1,5 @@
+tabWidth: 2
+packageManager: yarn
+semi: false
+singleQuote: true
+trailingComma': all
