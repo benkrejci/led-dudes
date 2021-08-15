@@ -159,7 +159,11 @@ class DotstarController extends AbstractLedController {
   }
 
   off() {
-    this.strip?.off()
+    //this.strip?.off()
+    // off() seems to have a bug which always leaves the last pixel in the strip on, this works better
+    for (let i = 0; i < this.config.stripLength; i++) {
+      this.setPixel(i, 0, 0, 0)
+    }
   }
 }
 
