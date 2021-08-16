@@ -164,6 +164,7 @@ class DotstarController extends AbstractLedController {
     for (let i = 0; i < this.config.stripLength; i++) {
       this.setPixel(i, 0, 0, 0)
     }
+    this.update()
   }
 }
 
