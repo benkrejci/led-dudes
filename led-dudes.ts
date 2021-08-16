@@ -141,6 +141,7 @@ export class DudeManager {
   }
 
   private checkSchedule(): void {
+    if (this.paused) return
     console.log(`Checking schedule...`)
     const now = new Date()
     if (this.currentScheduleRule === undefined) {
