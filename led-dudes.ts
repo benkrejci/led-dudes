@@ -133,11 +133,11 @@ export class DudeManager {
     for (let position = 0; position < this.config.stripLength; position++) {
       this.controller.setPixel(position, ...getRgb(position))
     }
+    this.controller.update()
   }
 
   public setAllPixels(rgb: Rgb) {
     this.setPixels((_position) => rgb)
-    this.controller.update()
   }
 
   private checkSchedule(): void {
